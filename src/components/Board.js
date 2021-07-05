@@ -8,7 +8,14 @@ class Board extends React.Component {
       squares: new Array(9).fill(''),
       player: 'X',
       winner: '',
-      winnerArr: []
+      winnerArr: [],
+      step: 1,
+      history: [
+        {
+          squares: new Array(9).fill(''),
+          player: 'X'
+        }
+      ]
     }
   }
 
@@ -16,12 +23,22 @@ class Board extends React.Component {
     if (this.state.winner) {
       return
     }
+    let squares = this.state.squares.slice(0)
+    let history = this.state.history.slice(0, this.state.step)
+    if (squares[index]) {
+      return
+    }
     let player = this.state.player === 'X' ? 'O' : 'X'
-    let squares = this.state.squares.slice()
-    squares[index] = player
+    squares[index] = this.state.player
+    history.push({
+      squares,
+      player
+    })
     this.setState({
       player,
       squares,
+      step: history.length,
+      history,
     })
     let res = this.calculateWinner(squares)
     if (res) {
@@ -62,9 +79,20 @@ class Board extends React.Component {
     }
     return null
   }
+  goback (i) {
+    this.setState((state) => {
+      return {
+        winner: "",
+        winnerArr: [],
+        squares: state.history[i].squares,
+        player: state.history[i].player,
+        step: i+1,
+      }
+    })
+  }
 
   render () {
-    const { squares, winner, player } = this.state
+    const { squares, winner, player, history } = this.state
     let title = ""
     if (!winner) {
       title = <p>Next player: {player}</p>
@@ -72,12 +100,24 @@ class Board extends React.Component {
       title = <p> Winner is: {winner}</p>
     }
     return (
-      <div className="board">
-        <h1>井字棋游戏--React</h1>
-        {title}
-        { squares.map((el, index) => {
-          return <Square key={index}  player={el} dynaClassName={this.highLightClassName(index)} changePlayer={this.changePlayer.bind(this, index)} />
-        })}
+      <div class="game_contain">
+        <div className="board">
+          <h1>井字棋游戏--React</h1>
+          {title}
+          { squares.map((el, index) => {
+            return <Square key={index}  player={el} dynaClassName={this.highLightClassName(index)} changePlayer={this.changePlayer.bind(this, index)} />
+          })}
+        </div>
+        <div className="back_step">
+          <p>历史步骤:</p>
+          { history.map((el, i) => {
+            return (
+              <button key={i} onClick={() => this.goback(i)}>
+                { i=== 0 ? "Back to game start" : "Back to No:" + i + " step"}
+              </button>
+            )
+          })}
+        </div>
       </div>
     )
   }

@@ -13,3 +13,13 @@
 .winner-square {
   background-color: aquamarine;
 }
+.back_step {
+  margin-top: 104px;
+}
+.back_step button{
+  display:block;
+  margin-bottom: 5px;
+}
+.game_contain{
+  display: flex;
+}

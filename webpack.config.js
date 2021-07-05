@@ -8,7 +8,7 @@ const htmlPlugin = new htmlWebpackPlugin({
 })
 
 // 向外暴露一个打包的实例对象，因为webpack是基于Node构建的，所以webpack支持所有Node API和语法
-// webpack 默认只能打包处理.js后缀名类型的文件，想.vue .png无法主动处理，所以要配置第三方的loader
+// webpack 默认只能打包处理.js后缀名类型的文件，向.vue .png无法主动处理，所以要配置第三方的loader
 module.exports = {
     mode: 'development', // development 或 production
     plugins: [

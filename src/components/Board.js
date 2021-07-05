@@ -92,10 +92,14 @@ class Board extends React.Component {
   }
 
   render () {
-    const { squares, winner, player, history } = this.state
+    const { squares, winner, player, history, step } = this.state
     let title = ""
     if (!winner) {
-      title = <p>Next player: {player}</p>
+      if (history.length === 10 && step === 10) {
+        title = <p>Game over: draw</p>
+      } else {
+        title = <p>Next player: {player}</p>
+      }
     } else {
       title = <p> Winner is: {winner}</p>
     }
